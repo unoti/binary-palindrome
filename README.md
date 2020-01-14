@@ -104,6 +104,19 @@ int is_palindrome_ands16(unsigned long num) {
 ```
 
 ## 3. Byte pattern matching
+1. Build a table 256 elements long of the palindome value for each byte
+2. Check if a 32 bit value is a palindrome like this:
+```c
+int is_palindrome_pattern32(unsigned long num) {
+    unsigned char b3 = (num >> 24);
+    unsigned char b2 = (num >> 16) & 0xff;
+    unsigned char b1 = (num >> 8) & 0xff;
+    unsigned char b0 = num & 0xff;
+    return b0 == byte_palindromes[b3] &&
+        b1 == byte_palindromes[b2];
+}
+```
+
 
 # Examining Binary Palindromes
 Let's run a quick test with the naive implementation for 8 bits.
