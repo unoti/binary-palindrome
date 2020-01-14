@@ -6,10 +6,16 @@
 #define FALSE 0
 #define TRUE -1
 
+
+unsigned char byte_palindromes[256];
+
 void usage() {
     printf("Usage: palindrome {approach}\n");
     printf("Where {approach} is:\n");
     printf("  1 Naive\n");
+    printf("  2 Unrolled Ands\n");
+    printf("  3 Pattern\n");
+    printf("  4 Skipper\n");
 }
 
 int is_palindrome_naive(unsigned long num) {
@@ -58,9 +64,6 @@ int is_palindrome_ands16(unsigned long num) {
         (((num & 0x00010000) != 0) == ((num & 0x00008000) != 0))
     );
 }
-
-unsigned char byte_palindromes[256];
-
 
 unsigned char reverse_byte(unsigned char byte) {
     unsigned char mask = 0x80;
@@ -149,7 +152,6 @@ void palindrome_ands() {
 void palindrome_pattern() {
     printf("Palindrome - pattern\n");
     initialize_table();
-    //print_table();
 
     unsigned long num_palindromes = 0;
     unsigned long last_num = 1 << BITS;
@@ -161,6 +163,28 @@ void palindrome_pattern() {
     }
     printf("%lu palindromes found with respect to %d bits.\n", num_palindromes, BITS);
 }
+
+
+void palindrome_skipper() {
+    printf("Palindrome - skipper\n");
+    initialize_table();
+
+    //print_table();
+
+    unsigned long num_palindromes = 0;
+    unsigned long last_num = 1 << (BITS / 2);
+    for (unsigned long num=0; num < last_num; num++) {
+        unsigned char b0 = num >> 8;
+        unsigned char b1 = num & 0xff;
+        unsigned char b2 = byte_palindromes[b1];
+        unsigned char b3 = byte_palindromes[b0];
+        unsigned long pal = b3 << 24 | b2 << 16 | b1 << 8 | b0;
+        //print_num(pal);
+        num_palindromes++;
+    }
+    printf("%lu palindromes found with respect to %d bits.\n", num_palindromes, BITS);
+}
+
 
 int main(int argc, char* argv[]) {
     printf("Binary Palindromes\n");
@@ -184,6 +208,9 @@ int main(int argc, char* argv[]) {
             break;
         case '3':
             palindrome_pattern();
+            break;
+        case '4':
+            palindrome_skipper();
             break;
 
         default:

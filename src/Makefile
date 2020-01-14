@@ -1,5 +1,5 @@
-FLAGS = -O3
-#FLAGS = 
+#FLAGS = -O3
+FLAGS = 
 
 palindrome : palindrome.o
 	cc $(FLAGS) -o palindrome palindrome.o

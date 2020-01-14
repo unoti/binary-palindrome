@@ -117,11 +117,18 @@ int is_palindrome_pattern32(unsigned long num) {
 }
 ```
 
+## 4. The Skipper
+The idea of this approach is to just build the palindromes explicitly rather than iterating over all the possible numbers and checking each one.
 
-# Examining Binary Palindromes
+To illustrate, let's look at how we'd generate the palindromes for 8 bits.  There are 16 palindromes for 8 bit numbers.
+
+## Examining Binary Palindromes
 Let's run a quick test with the naive implementation for 8 bits.
 ```c
 #define BITS 8 // Number of bits we'll check palindromes for.
+```
+```
+clear && make && ./palindrome 1
 ```
 
 After writing the naive implementation and running it for 8 bits, we get this result:
@@ -177,6 +184,10 @@ ffffff 111111111111111111111111
 
 Basically, I think you could just make a program that *generates* the palindromes recursively or iteratively without even actually *iterating* over all of them.  Basically, I think I could make a python program that generates these faster than a C program could iterate over them.
 
+In each of the above cases, the number of palindromes that are available is the number of possible combinations for BITS/2.  Or, 2 ^ (BITS/2).
+
+So what we can do is take the number of bytes involved and divide by 2, so we'll iterate all the possible values for the left-side bytes.  Then we'll produce mirror images of those in the right-side bytes.
+
 # Timing
 I removed the printing of numbers and ran it for 30 bits.  I used 30 bits because it's meaty enough to give the computer something to think about, but doesn't take too long.
 
@@ -188,8 +199,14 @@ I removed the printing of numbers and ran it for 30 bits.  I used 30 bits becaus
 | Patterns (unoptimized) | 3.19s |
 | Naive (unoptimized)   | 6.41s|
 | Unrolled Ands (unoptimized) | 3.11s |
+| Skipper -O3 | negligible* or 0.13s |
 
 Note that only the Naive version is correct, and there is some kind of problem in the other versions that I didn't track down.  But the order of magnitude of the speeds is correct.
+
+* Negligible time for the skipper is because when you turn on optimization the compiler is able to determine at compile time how many loop iterations there will be, and just prints that number.  If I turn on number printing, I get 0.13s, which isn't a fair comparison to the other tests because they don't print numbers.
+
+# Conclusion
+Of all the approaches, I like the naive version best.  It was the easiest to get right, is the most maintainable, and doesn't require hand-alteration of the code for varying numbers of bits and bytes.
 
 # Next Steps
 * Make a Python version that's even faster by just iterating through the exact palindromes, instead of iterating the entire space of numbers and filtering.
