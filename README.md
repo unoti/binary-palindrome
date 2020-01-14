@@ -232,6 +232,8 @@ Note that only the Naive version is correct, and there is some kind of problem i
 # Conclusion
 Of all the approaches, I like the naive version best.  It was the easiest to get right, is the most maintainable, and doesn't require hand-alteration of the code for varying numbers of bits and bytes.
 
+The unrolled version is essentially the same thing as the naive version when you add in optimization.  But somehow the optimizer was able to do a better job of optimizing the naive version than it was the unrolled version.  Plus the naive version is the only one of the several implementations that doesn't have known bugs, and it's the only one of the various versions that works unmodified across a range of different bit sizes. In short, it's easier to understand and more maintainable.
+
 # Next Steps
 * Make a Python version that's even faster by just iterating through the exact palindromes, instead of iterating the entire space of numbers and filtering.
 * Correct issues with approaches 2 and 3.
