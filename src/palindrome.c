@@ -174,8 +174,8 @@ void palindrome_skipper() {
     unsigned long num_palindromes = 0;
     unsigned long last_num = 1 << (BITS / 2);
     for (unsigned long num=0; num < last_num; num++) {
-        unsigned char b0 = num >> 8;
-        unsigned char b1 = num & 0xff;
+        unsigned char b0 = num & 0xff;
+        unsigned char b1 = (num >> 8) & 0xff;
         unsigned char b2 = byte_palindromes[b1];
         unsigned char b3 = byte_palindromes[b0];
         unsigned long pal = b3 << 24 | b2 << 16 | b1 << 8 | b0;
