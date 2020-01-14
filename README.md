@@ -184,9 +184,32 @@ ffffff 111111111111111111111111
 
 Basically, I think you could just make a program that *generates* the palindromes recursively or iteratively without even actually *iterating* over all of them.  Basically, I think I could make a python program that generates these faster than a C program could iterate over them.
 
+
+## Code for The Skipper
 In each of the above cases, the number of palindromes that are available is the number of possible combinations for BITS/2.  Or, 2 ^ (BITS/2).
 
 So what we can do is take the number of bytes involved and divide by 2, so we'll iterate all the possible values for the left-side bytes.  Then we'll produce mirror images of those in the right-side bytes.
+
+```c
+void palindrome_skipper() {
+    printf("Palindrome - skipper\n");
+    initialize_table();
+
+    //print_table();
+
+    unsigned long num_palindromes = 0;
+    unsigned long last_num = 1 << (BITS / 2);
+    for (unsigned long num=0; num < last_num; num++) {
+        unsigned char b0 = num >> 8;
+        unsigned char b1 = num & 0xff;
+        unsigned char b2 = byte_palindromes[b1];
+        unsigned char b3 = byte_palindromes[b0];
+        unsigned long pal = b3 << 24 | b2 << 16 | b1 << 8 | b0;
+        print_num(pal);
+        num_palindromes++;
+    }
+}
+```
 
 # Timing
 I removed the printing of numbers and ran it for 30 bits.  I used 30 bits because it's meaty enough to give the computer something to think about, but doesn't take too long.
@@ -203,7 +226,7 @@ I removed the printing of numbers and ran it for 30 bits.  I used 30 bits becaus
 
 Note that only the Naive version is correct, and there is some kind of problem in the other versions that I didn't track down.  But the order of magnitude of the speeds is correct.
 
-* Negligible time for the skipper is because when you turn on optimization the compiler is able to determine at compile time how many loop iterations there will be, and just prints that number.  If I turn on number printing, I get 0.13s, which isn't a fair comparison to the other tests because they don't print numbers.
+\* Negligible time for The Skipper is because when you turn on optimization the compiler is able to determine at compile time how many loop iterations there will be, and just prints that number.  If I turn on number printing, I get 0.13s, which isn't a fair comparison to the other tests because they don't print numbers.
 
 # Conclusion
 Of all the approaches, I like the naive version best.  It was the easiest to get right, is the most maintainable, and doesn't require hand-alteration of the code for varying numbers of bits and bytes.

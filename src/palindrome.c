@@ -179,7 +179,7 @@ void palindrome_skipper() {
         unsigned char b2 = byte_palindromes[b1];
         unsigned char b3 = byte_palindromes[b0];
         unsigned long pal = b3 << 24 | b2 << 16 | b1 << 8 | b0;
-        //print_num(pal);
+        print_num(pal);
         num_palindromes++;
     }
     printf("%lu palindromes found with respect to %d bits.\n", num_palindromes, BITS);
